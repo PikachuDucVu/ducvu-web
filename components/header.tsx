@@ -1,11 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import { links } from "@/lib/data";
 import Link from "next/link";
+import clsx from "clsx";
+import { useActiveSectionContext } from "@/context/activeSectionContext";
 
 const Header = () => {
+  const { activeSection, setActiveSection } = useActiveSectionContext();
+
   return (
     <header className="z-[999] relative">
       <motion.div
@@ -25,9 +29,24 @@ const Header = () => {
             >
               <Link
                 href={link.hash}
-                className="flex w-full items-center justify-center px-3 py-3 hover:text-gray-950 transition"
+                className={
+                  "flex w-full items-center justify-center px-3 py-3 hover:text-gray-950 transition rounded-full" +
+                  (activeSection === link.name ? "text-gray-950" : "")
+                }
+                onClick={() => setActiveSection(link.name)}
               >
                 {link.name}
+                {link.name === activeSection && (
+                  <motion.span
+                    layoutId="activeSection"
+                    transition={{
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 30,
+                    }}
+                    className="bg-gray-200 rounded-full absolute inset-0 -z-10"
+                  ></motion.span>
+                )}
               </Link>
             </motion.li>
           ))}

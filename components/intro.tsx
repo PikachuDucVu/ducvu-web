@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { BsArrowRight } from "react-icons/bs";
@@ -9,10 +9,27 @@ import { HiDownload } from "react-icons/hi";
 import { BsFacebook } from "react-icons/bs";
 import { FaGithubSquare } from "react-icons/fa";
 import avatar from "@/public/avatar.jpg";
+import { useInView } from "react-intersection-observer";
+import { useActiveSectionContext } from "@/context/activeSectionContext";
 
 const Intro = () => {
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
+  const { setActiveSection } = useActiveSectionContext();
+
+  useEffect(() => {
+    if (inView) {
+      setActiveSection("Home");
+    }
+  }, [inView, setActiveSection]);
+
   return (
-    <section className="mb-28 max-w-[50rem] text-center sm:mb-0">
+    <section
+      ref={ref}
+      className="mb-28 max-w-[50rem] text-center sm:mb-0 scroll-mt-[100rem]"
+      id="home"
+    >
       <div className="flex items-center justify-center">
         <div className="relative">
           <motion.div
@@ -46,7 +63,7 @@ const Intro = () => {
         <span className="font-bold">Full-stack, Game Developer </span>
         <span> at </span>
         <span className="font-bold">Gamefox.vn</span>
-        <span> with 1 year exp. I enjoy building </span>
+        <span> with 1 year experience. I enjoy building </span>
         <span className="underline">Site, Game platform and Apps.</span>
       </motion.p>
 
